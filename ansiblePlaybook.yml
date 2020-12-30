@@ -1,0 +1,20 @@
+#批量抓取指定主机文件目录下的文件，至ansible主机
+
+---
+- hosts:  test20201251
+  remote_user: root
+
+  tasks:
+    - name: findpath
+      find:
+        paths: /tmp/struts2result2020/
+        patterns: "*"
+        recurse: no
+      register: file_2_fetch
+
+    - name: fetch
+      fetch:
+        src: "{{ item.path }}"
+        dest: /app/test
+        flat: yes
+      with_items: "{{ file_2_fetch.files }}"
